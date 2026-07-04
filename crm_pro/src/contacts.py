@@ -7,6 +7,7 @@ from modules.contacts.edit_contact import EditContactWindow
 from modules.contacts.delete_contact import DeleteContactWindow
 from modules.contacts.search_contact import search
 from modules.contacts.export_contacts import export_contacts
+from modules.contacts.import_contacts import import_contacts
 
 
 class ContactsPage(ctk.CTkFrame):
@@ -83,6 +84,12 @@ class ContactsPage(ctk.CTkFrame):
             text="Delete",
             command=self.open_delete_contact
         ).pack(side="left", padx=5)
+
+        ctk.CTkButton(
+            button_frame,
+            text="Import",
+            command=import_contacts
+        ).pack(side="right", padx=5)
 
         ctk.CTkButton(
             button_frame,
