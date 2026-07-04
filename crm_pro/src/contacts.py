@@ -6,6 +6,7 @@ from modules.contacts.add_contact import AddContactWindow
 from modules.contacts.edit_contact import EditContactWindow
 from modules.contacts.delete_contact import DeleteContactWindow
 from modules.contacts.search_contact import search
+from modules.contacts.export_contacts import export_contacts
 
 
 class ContactsPage(ctk.CTkFrame):
@@ -85,7 +86,8 @@ class ContactsPage(ctk.CTkFrame):
 
         ctk.CTkButton(
             button_frame,
-            text="Export"
+            text="Export",
+            command=export_contacts
         ).pack(side="right", padx=5)
 
         self.load_contacts()
