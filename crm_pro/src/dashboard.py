@@ -1,5 +1,7 @@
+from modules.contacts.edit_contact import EditContactWindow
 import customtkinter as ctk
 from contacts import ContactsPage
+from modules.dashboard.dashboard_page import DashboardPage
 
 ctk.set_appearance_mode("Light")
 ctk.set_default_color_theme("green")
@@ -67,18 +69,7 @@ class Dashboard(ctk.CTk):
 
     def show_dashboard(self):
         self.clear_main()
-
-        ctk.CTkLabel(
-            self.main,
-            text="Dashboard",
-            font=("Arial", 30, "bold")
-        ).pack(pady=30)
-
-        ctk.CTkLabel(
-            self.main,
-            text="Welcome to Ashwin WhatsApp CRM Pro",
-            font=("Arial", 20)
-        ).pack(pady=10)
+        DashboardPage(self.main)
 
     def show_contacts(self):
         self.clear_main()

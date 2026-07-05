@@ -112,3 +112,21 @@ def search_contact(keyword):
     conn.close()
 
     return data
+
+def get_total_contacts():
+
+    conn = connect()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT COUNT(*) FROM contacts"
+    )
+
+    total = cursor.fetchone()[0]
+
+    conn.close()
+
+    return total
+
+def get_today_contacts():
+    return get_total_contacts()
