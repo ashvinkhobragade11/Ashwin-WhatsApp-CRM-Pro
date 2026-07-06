@@ -1,6 +1,10 @@
 import customtkinter as ctk
 from tkinter import messagebox
+import sqlite3
+import os
 from database import add_contact
+
+from modules.dashboard.activity import add_activity
 
 class AddContactWindow(ctk.CTkToplevel):
 
@@ -53,9 +57,11 @@ class AddContactWindow(ctk.CTkToplevel):
         
         add_contact(name, phone)
 
+        add_activity(f"➕ Added Contact: {name}")
+
         messagebox.showinfo(
             "Success",
             "Contact Saved Successfully"
-        )
+            )
 
         self.destroy()

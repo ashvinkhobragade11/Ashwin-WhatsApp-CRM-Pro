@@ -1,6 +1,7 @@
 import customtkinter as ctk
 
 from modules.dashboard.statistics import dashboard_statistics
+from modules.dashboard.activity import get_recent_activities
 
 
 class DashboardPage(ctk.CTkFrame):
@@ -11,6 +12,7 @@ class DashboardPage(ctk.CTkFrame):
         self.pack(fill="both", expand=True)
 
         stats = dashboard_statistics()
+        activities = get_recent_activities()
 
         title = ctk.CTkLabel(
             self,
@@ -19,21 +21,104 @@ class DashboardPage(ctk.CTkFrame):
         )
         title.pack(pady=25)
 
-        self.total_card = ctk.CTkFrame(
+        cards_frame = ctk.CTkFrame(
             self,
-            width=300,
-            height=140
+            fg_color="transparent"
         )
-        self.total_card.pack(pady=20)
+        cards_frame.pack(pady=20)
+
+        self.total_card = self.create_stat_card(
+            cards_frame,
+            "👥 Total Contacts",
+            stats["total_contacts"]
+        )
+
+        self.total_card.grid(
+            row=0,
+            column=0,
+            padx=15,
+            pady=15
+        )
+        
+        self.today_card = self.create_stat_card(
+            cards_frame,
+            "📅 Today's Contacts",
+            stats.get("today_contacts", 0)
+        )
+
+        self.today_card.grid(
+            row=0,
+            column=1,
+            padx=15,
+            pady=15
+        )
+        activity_frame = ctk.CTkFrame(
+            self
+        )
+        activity_frame.pack(
+            fill="x",
+            padx=25,
+            pady=20
+        )
 
         ctk.CTkLabel(
-            self.total_card,
-            text="👥 Total Contacts",
+            activity_frame,
+            text="📋 Recent Activity",
             font=("Arial", 22, "bold")
+        ).pack(
+            anchor="w",
+            padx=20,
+            pady=(15, 10)
+        )
+        if not activities:
+
+            ctk.CTkLabel(
+                activity_frame,
+                text="No Activity Yet",
+                font=("Arial", 16)
+            ).pack(
+                anchor="w",
+                padx=20,
+                pady=5
+            )
+
+        else:
+
+            for activity in activities:
+
+                ctk.CTkLabel(
+                    activity_frame,
+                    text=activity,
+                    font=("Arial", 16)
+                ).pack(
+                    anchor="w",
+                    padx=20,
+                    pady=3
+                )
+
+    def create_stat_card(
+        self,
+        parent,
+        title,
+        value
+    ):
+
+        card = ctk.CTkFrame(
+            parent,
+            width=260,
+            height=140
+        )
+
+        ctk.CTkLabel(
+            card,
+            text=title,
+            font=("Arial", 20, "bold")
         ).pack(pady=(20, 10))
 
         ctk.CTkLabel(
-            self.total_card,
-            text=str(stats["total_contacts"]),
-            font=("Arial", 40, "bold")
+            card,
+            text=str(value),
+            font=("Arial", 38, "bold")
         ).pack()
+
+        return card
