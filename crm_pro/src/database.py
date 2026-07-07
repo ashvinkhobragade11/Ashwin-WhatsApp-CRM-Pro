@@ -1,13 +1,16 @@
+import os
 import sqlite3
 
-DB_NAME = "crm_pro/data/contacts.db"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+DB_NAME = os.path.join(BASE_DIR, "data", "contacts.db")
 
 def connect():
     return sqlite3.connect(DB_NAME)
 
 
 def create_table():
+
     conn = connect()
     cursor = conn.cursor()
 
@@ -25,6 +28,8 @@ def create_table():
 
     conn.commit()
     conn.close()
+
+    create_users_table()
 
 
 def add_contact(name, phone):
@@ -130,3 +135,40 @@ def get_total_contacts():
 
 def get_today_contacts():
     return get_total_contacts()
+
+
+def create_users_table():
+
+    conn = connect()
+
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            username TEXT UNIQUE NOT NULL,
+
+            password_hash TEXT NOT NULL,
+
+            full_name TEXT,
+
+            email TEXT,
+
+            mobile TEXT,
+
+            role TEXT DEFAULT 'Executive',
+
+            status TEXT DEFAULT 'Active',
+
+            created_at TEXT,
+
+            last_login TEXT
+
+        )
+    """)
+
+    conn.commit()
+
+    conn.close()
