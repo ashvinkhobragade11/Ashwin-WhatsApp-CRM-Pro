@@ -1,10 +1,10 @@
 import customtkinter as ctk
-
 from tkinter import messagebox
 
 from database import connect
-
 from modules.auth.password_manager import verify_password
+from modules.auth.user_manager import get_user
+
 
 class LoginWindow(ctk.CTk):
 
@@ -71,25 +71,52 @@ class LoginWindow(ctk.CTk):
         ).pack(side="bottom", pady=20)
 
     def login(self):
+        username = self.username.get().strip()
+        password = self.password.get().strip()
 
-     username = self.username.get().strip()
-     password = self.password.get().strip()
+        # Username Validation
+        if username == "":
+            messagebox.showerror(
+                "Login Error",
+                "Please enter username."
+            )
+            return
 
-     if username == "":
-        messagebox.showerror(
-            "Login Error",
-            "Please enter username."
+        # Password Validation
+        if password == "":
+            messagebox.showerror(
+                "Login Error",
+                "Please enter password."
+            )
+            return
+
+        # Fetch User
+        user = get_user(username)
+
+        if user is None:
+            messagebox.showerror(
+                "Login Error",
+                "Invalid Username or Password"
+            )
+            return
+
+        # Verify Password
+        stored_hash = user[1]
+
+        if not verify_password(password, stored_hash):
+            messagebox.showerror(
+                "Login Error",
+                "Invalid Username or Password"
+            )
+            return
+
+        # Login Success
+        messagebox.showinfo(
+            "Success",
+            "Login Successful"
         )
-        return
 
-     if password == "":
-        messagebox.showerror(
-            "Login Error",
-            "Please enter password."
-        )
-        return
 
-    messagebox.showinfo(
-        "Validation",
-        "Validation Successful"
-    )
+if __name__ == "__main__":
+    app = LoginWindow()
+    app.mainloop()

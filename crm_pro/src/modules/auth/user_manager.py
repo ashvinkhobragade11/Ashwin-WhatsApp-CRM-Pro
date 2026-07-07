@@ -1,6 +1,7 @@
 from database import connect
 from modules.auth.password_manager import hash_password
 
+
 def create_default_admin():
 
     conn = connect()
@@ -14,7 +15,6 @@ def create_default_admin():
     user = cursor.fetchone()
 
     if user:
-
         conn.close()
         return
 
@@ -30,7 +30,7 @@ def create_default_admin():
             role,
             status
         )
-        VALUES(?,?,?,?,?)
+        VALUES (?,?,?,?,?)
         """,
         (
             "admin",
@@ -43,3 +43,28 @@ def create_default_admin():
 
     conn.commit()
     conn.close()
+
+
+def get_user(username):
+
+    conn = connect()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT
+            username,
+            password_hash,
+            role,
+            status
+        FROM users
+        WHERE username=?
+        """,
+        (username,)
+    )
+
+    user = cursor.fetchone()
+
+    conn.close()
+
+    return user
