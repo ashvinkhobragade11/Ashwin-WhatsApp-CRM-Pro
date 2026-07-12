@@ -1,5 +1,8 @@
 import customtkinter as ctk
+from tkinter import ttk
 
+from database import get_users
+from modules.users.add_user import AddUserWindow
 
 class UsersPage(ctk.CTkFrame):
 
@@ -13,10 +16,64 @@ class UsersPage(ctk.CTkFrame):
             text="User Management",
             font=("Arial", 30, "bold")
         )
-        title.pack(pady=(30, 20))
+        title.pack(pady=20)
 
-        ctk.CTkLabel(
+        button_frame = ctk.CTkFrame(self)
+        button_frame.pack(fill="x", padx=20)
+
+        ctk.CTkButton(
+            button_frame,
+            text="Add User",
+            width=150,
+            command=self.open_add_user
+        ).pack(side="left", pady=10)
+
+        table_frame = ctk.CTkFrame(self)
+        table_frame.pack(
+            fill="both",
+            expand=True,
+            padx=20,
+            pady=20
+        )
+
+        self.tree = ttk.Treeview(
+            table_frame,
+            columns=("Username", "Role", "Status"),
+            show="headings"
+        )
+
+        self.tree.heading("Username", text="Username")
+        self.tree.heading("Role", text="Role")
+        self.tree.heading("Status", text="Status")
+
+        self.tree.column("Username", width=250)
+        self.tree.column("Role", width=180)
+        self.tree.column("Status", width=180)
+
+        self.tree.pack(
+            fill="both",
+            expand=True
+        )
+
+        self.load_users()
+
+    def load_users(self):
+
+        for row in self.tree.get_children():
+            self.tree.delete(row)
+
+        users = get_users()
+
+        for user in users:
+            self.tree.insert(
+                "",
+                "end",
+                values=user
+            )
+
+    def open_add_user(self):
+
+        AddUserWindow(
             self,
-            text="🚧 User Management Module is under development.",
-            font=("Arial", 18)
-        ).pack(pady=20)
+            self.load_users
+        )

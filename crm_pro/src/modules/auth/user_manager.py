@@ -1,5 +1,6 @@
 from database import connect
 from modules.auth.password_manager import hash_password
+from database import add_user
 
 
 def create_default_admin():
@@ -68,3 +69,25 @@ def get_user(username):
     conn.close()
 
     return user
+
+def create_user(
+    username,
+    password,
+    full_name,
+    role,
+    status
+):
+    existing_user = get_user(username)
+
+    if existing_user:
+        return False
+    password_hash = hash_password(password)
+
+    add_user(
+        username,
+        password_hash,
+        full_name,
+        role,
+        status
+    )
+    return True

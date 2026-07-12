@@ -172,3 +172,58 @@ def create_users_table():
     conn.commit()
 
     conn.close()
+
+def get_users():
+
+    conn = connect()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            username,
+            role,
+            status
+        FROM users
+        ORDER BY username
+    """)
+
+    users = cursor.fetchall()
+
+    conn.close()
+
+    return users
+
+def add_user(
+    username,
+    password_hash,
+    full_name,
+    role,
+    status
+):
+
+    conn = connect()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        INSERT INTO users
+        (
+            username,
+            password_hash,
+            full_name,
+            role,
+            status
+        )
+        VALUES (?,?,?,?,?)
+        """,
+        (
+            username,
+            password_hash,
+            full_name,
+            role,
+            status
+        )
+    )
+
+    conn.commit()
+    conn.close()
