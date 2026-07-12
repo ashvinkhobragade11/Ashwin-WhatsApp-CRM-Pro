@@ -3,6 +3,7 @@ from tkinter import ttk
 
 from database import get_users
 from modules.users.add_user import AddUserWindow
+from modules.users.edit_user import EditUserWindow  
 
 class UsersPage(ctk.CTkFrame):
 
@@ -27,6 +28,12 @@ class UsersPage(ctk.CTkFrame):
             width=150,
             command=self.open_add_user
         ).pack(side="left", pady=10)
+
+        ctk.CTkButton(
+            button_frame,
+            text="✏️ Edit User",
+            command=self.open_edit_user
+        ).pack(side="left", padx=10)
 
         table_frame = ctk.CTkFrame(self)
         table_frame.pack(
@@ -77,3 +84,20 @@ class UsersPage(ctk.CTkFrame):
             self,
             self.load_users
         )
+
+    def open_edit_user(self):
+
+        selected = self.tree.selection()
+
+        if not selected:
+            return
+
+        values = self.tree.item(selected[0])["values"]
+
+        EditUserWindow(
+            self,
+            values[0],
+            values[1],
+            values[2],
+            self.load_users
+        )   

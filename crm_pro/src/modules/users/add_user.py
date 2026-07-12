@@ -71,27 +71,6 @@ class AddUserWindow(ctk.CTkToplevel):
         role = self.role.get()
         status = self.status.get()
 
-        if username == "":
-            messagebox.showerror(
-                "Error",
-                "Username is required."
-            )
-            return
-
-        if password == "":
-            messagebox.showerror(
-                "Error",
-                "Password is required."
-            )
-            return
-
-        if full_name == "":
-            messagebox.showerror(
-                "Error",
-                "Full Name is required."
-            )
-            return
-
         success = create_user(
             username,
             password,
@@ -111,6 +90,7 @@ class AddUserWindow(ctk.CTkToplevel):
             "Success",
             "User created successfully."
         )
+
         self.refresh_callback()
 
         self.destroy()

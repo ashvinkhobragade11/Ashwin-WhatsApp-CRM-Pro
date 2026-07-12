@@ -1,5 +1,7 @@
 import os
 import sqlite3
+from tkinter import messagebox
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -222,6 +224,33 @@ def add_user(
             full_name,
             role,
             status
+        )
+    )
+
+    conn.commit()
+    conn.close()
+
+def update_user(
+    username,
+    role,
+    status
+):
+
+    conn = connect()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        UPDATE users
+        SET
+            role=?,
+            status=?
+        WHERE username=?
+        """,
+        (
+            role,
+            status,
+            username
         )
     )
 

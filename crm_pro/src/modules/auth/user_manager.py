@@ -1,7 +1,9 @@
 from database import connect
 from modules.auth.password_manager import hash_password
-from database import add_user
-
+from database import (
+    add_user,
+    update_user
+)
 
 def create_default_admin():
 
@@ -91,3 +93,14 @@ def create_user(
         status
     )
     return True
+def edit_user(
+    username,
+    role,
+    status
+):
+
+    update_user(
+        username,
+        role,
+        status
+    )
