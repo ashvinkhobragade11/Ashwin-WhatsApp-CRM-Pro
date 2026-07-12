@@ -1,7 +1,14 @@
-from modules.contacts.edit_contact import EditContactWindow
 import customtkinter as ctk
+from tkinter import messagebox
+
 from contacts import ContactsPage
+from modules.contacts.edit_contact import EditContactWindow
 from modules.dashboard.dashboard_page import DashboardPage
+from modules.dashboard.activity import get_recent_activities
+from modules.auth.session_manager import (
+    get_current_user,
+    destroy_session
+)
 
 ctk.set_appearance_mode("Light")
 ctk.set_default_color_theme("green")
@@ -15,6 +22,9 @@ class Dashboard(ctk.CTk):
         self.title("Ashwin WhatsApp CRM Pro")
         self.geometry("1400x800")
 
+        # Current Logged-in User
+        self.current_user = get_current_user()
+
         # Sidebar
         self.sidebar = ctk.CTkFrame(self, width=220)
         self.sidebar.pack(side="left", fill="y")
@@ -26,6 +36,29 @@ class Dashboard(ctk.CTk):
         )
         title.pack(pady=30)
 
+        # User Information
+        if self.current_user:
+
+            welcome = ctk.CTkLabel(
+                self.sidebar,
+                text=f"Welcome\n{self.current_user[0]}",
+                font=("Arial", 16, "bold")
+            )
+            welcome.pack(pady=10)
+
+            role = ctk.CTkLabel(
+                self.sidebar,
+                text=f"Role : {self.current_user[2]}"
+            )
+            role.pack()
+
+            status = ctk.CTkLabel(
+                self.sidebar,
+                text=f"Status : {self.current_user[3]}"
+            )
+            status.pack(pady=(0, 20))
+
+        # Sidebar Buttons
         self.btn_dashboard = ctk.CTkButton(
             self.sidebar,
             text="Dashboard",
@@ -58,6 +91,16 @@ class Dashboard(ctk.CTk):
         )
         self.btn_settings.pack(pady=8)
 
+        self.btn_logout = ctk.CTkButton(
+            self.sidebar,
+            text="Logout",
+            fg_color="red",
+            hover_color="#b22222",
+            command=self.logout
+        )
+        self.btn_logout.pack(pady=20)
+
+        # Main Frame
         self.main = ctk.CTkFrame(self)
         self.main.pack(fill="both", expand=True)
 
@@ -74,3 +117,13 @@ class Dashboard(ctk.CTk):
     def show_contacts(self):
         self.clear_main()
         ContactsPage(self.main)
+
+    def logout(self):
+        messagebox.showinfo(
+            "Logout",
+            "Logout feature is under development."
+    )
+
+if __name__ == "__main__":
+    app = Dashboard()
+    app.mainloop()

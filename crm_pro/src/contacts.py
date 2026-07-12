@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 
 from database import get_contacts
 from modules.contacts.add_contact import AddContactWindow
@@ -54,15 +54,16 @@ class ContactsPage(ctk.CTkFrame):
             show="headings"
         )
 
-        self.tree.heading("ID", text="ID")
+        self.tree.heading("ID", text="SR No.")
         self.tree.heading("Name", text="Name")
-        self.tree.heading("Phone", text="Phone")
+        self.tree.heading("Phone", text="Mobile Number")
 
-        self.tree.column("ID", width=70)
-        self.tree.column("Name", width=250)
-        self.tree.column("Phone", width=250)
+        self.tree.column("ID", width=80, anchor="center")
+        self.tree.column("Name", width=300)
+        self.tree.column("Phone", width=220)
 
         self.tree.pack(fill="both", expand=True)
+        self.tree.bind("<Double-1>", self.on_double_click)
 
         button_frame = ctk.CTkFrame(self)
         button_frame.pack(fill="x", padx=20, pady=10)
@@ -102,11 +103,18 @@ class ContactsPage(ctk.CTkFrame):
         AddContactWindow(self)
         self.after(500, self.load_contacts)
 
+    def on_double_click(self, event):
+        self.open_edit_contact()
+
     def open_edit_contact(self):
 
         selected = self.tree.selection()
 
         if not selected:
+            messagebox.showwarning(
+                "Selection Required",
+                "Please select a contact."
+            )
             return
 
         values = self.tree.item(selected[0])["values"]
@@ -125,6 +133,10 @@ class ContactsPage(ctk.CTkFrame):
         selected = self.tree.selection()
 
         if not selected:
+            messagebox.showwarning(
+                "Selection Required",
+                "Please select a contact."
+            )
             return
 
         values = self.tree.item(selected[0])["values"]

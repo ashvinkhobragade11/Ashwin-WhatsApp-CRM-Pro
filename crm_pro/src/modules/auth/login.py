@@ -1,12 +1,11 @@
 import customtkinter as ctk
 from tkinter import messagebox
 
-from database import connect
+
 from modules.auth.password_manager import verify_password
 from modules.auth.user_manager import get_user
 from dashboard import Dashboard
 from modules.auth.session_manager import create_session
-from modules.auth.session_manager import create_session, get_current_user
 
 class LoginWindow(ctk.CTk):
 
@@ -114,7 +113,6 @@ class LoginWindow(ctk.CTk):
 
         # Login Success
         create_session(user)
-        print("SESSION TEST :", get_current_user())
         messagebox.showinfo(
             "Success",
             "Login Successful"
