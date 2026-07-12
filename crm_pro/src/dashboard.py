@@ -1,6 +1,8 @@
 import customtkinter as ctk
 from tkinter import messagebox
 
+from modules.users.users_page import UsersPage
+from modules.reports.reports_page import ReportsPage
 from contacts import ContactsPage
 from modules.contacts.edit_contact import EditContactWindow
 from modules.dashboard.dashboard_page import DashboardPage
@@ -15,6 +17,15 @@ ctk.set_default_color_theme("green")
 
 
 class Dashboard(ctk.CTk):
+
+    def show_users(self):
+        self.clear_main()
+        UsersPage(self.main)
+
+    def show_reports(self):
+        self.clear_main()
+        ReportsPage(self.main)
+
 
     def __init__(self):
         super().__init__()
@@ -81,9 +92,17 @@ class Dashboard(ctk.CTk):
 
         self.btn_reports = ctk.CTkButton(
             self.sidebar,
-            text="Reports"
+            text="Reports",
+            command=self.show_reports
         )
         self.btn_reports.pack(pady=8)
+
+        self.btn_users = ctk.CTkButton(
+            self.sidebar,
+            text="Users",
+            command=self.show_users
+        )
+        self.btn_users.pack(pady=8)
 
         self.btn_settings = ctk.CTkButton(
             self.sidebar,
