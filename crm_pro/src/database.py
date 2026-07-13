@@ -256,3 +256,20 @@ def update_user(
 
     conn.commit()
     conn.close()
+
+def disable_user(username):
+
+    conn = connect()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        UPDATE users
+        SET status='Inactive'
+        WHERE username=?
+        """,
+        (username,)
+    )
+
+    conn.commit()
+    conn.close()

@@ -4,6 +4,13 @@ from database import (
     add_user,
     update_user
 )
+from database import (
+    connect,
+    add_user,
+    update_user,
+    disable_user
+)
+
 
 def create_default_admin():
 
@@ -104,3 +111,7 @@ def edit_user(
         role,
         status
     )
+
+def deactivate_user(username):
+
+    disable_user(username)

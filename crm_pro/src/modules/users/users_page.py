@@ -1,9 +1,12 @@
 import customtkinter as ctk
 from tkinter import ttk
+from tkinter import messagebox
 
+from modules.auth.user_manager import deactivate_user
 from database import get_users
 from modules.users.add_user import AddUserWindow
-from modules.users.edit_user import EditUserWindow  
+from modules.users.edit_user import EditUserWindow
+
 
 class UsersPage(ctk.CTkFrame):
 
@@ -34,6 +37,17 @@ class UsersPage(ctk.CTkFrame):
             text="✏️ Edit User",
             command=self.open_edit_user
         ).pack(side="left", padx=10)
+
+        ctk.CTkButton(
+            button_frame,
+            text="Disable User",
+            fg_color="orange",
+            hover_color="#cc8400",
+            command=self.disable_user
+        ).pack(
+            side="left",
+            padx=10
+        )
 
         table_frame = ctk.CTkFrame(self)
         table_frame.pack(
@@ -100,4 +114,37 @@ class UsersPage(ctk.CTkFrame):
             values[1],
             values[2],
             self.load_users
-        )   
+        )
+
+    def disable_user(self):
+
+        selected = self.tree.selection()
+
+        if not selected:
+
+            messagebox.showwarning(
+                "Warning",
+                "Please select a user."
+            )
+            return
+
+        values = self.tree.item(selected[0])["values"]
+
+        username = values[0]
+
+        confirm = messagebox.askyesno(
+            "Disable User",
+            f"Disable user '{username}'?"
+        )
+
+        if not confirm:
+            return
+
+        deactivate_user(username)
+
+        messagebox.showinfo(
+            "Success",
+            "User disabled successfully."
+        )
+
+        self.load_users()

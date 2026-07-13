@@ -110,6 +110,14 @@ class LoginWindow(ctk.CTk):
                 "Invalid Username or Password"
             )
             return
+        
+        if user[3] == "Inactive":
+
+            messagebox.showerror(
+                "Account Disabled",
+                "Your account has been disabled. Please contact the administrator."
+            )
+            return
 
         # Login Success
         create_session(user)
