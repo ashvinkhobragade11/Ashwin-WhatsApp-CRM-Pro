@@ -2,7 +2,8 @@ from database import connect
 from modules.auth.password_manager import hash_password
 from database import (
     add_user,
-    update_user
+    update_user,
+    update_password
 )
 from database import (
     connect,
@@ -115,3 +116,15 @@ def edit_user(
 def deactivate_user(username):
 
     disable_user(username)
+
+def reset_user_password(
+    username,
+    password
+):
+
+    password_hash = hash_password(password)
+
+    update_password(
+        username,
+        password_hash
+    )

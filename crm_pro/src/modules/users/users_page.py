@@ -2,10 +2,12 @@ import customtkinter as ctk
 from tkinter import ttk
 from tkinter import messagebox
 
+from modules.users.reset_password import ResetPasswordWindow
 from modules.auth.user_manager import deactivate_user
 from database import get_users
 from modules.users.add_user import AddUserWindow
 from modules.users.edit_user import EditUserWindow
+from modules.auth.session_manager import get_current_user
 
 
 class UsersPage(ctk.CTkFrame):
@@ -13,6 +15,7 @@ class UsersPage(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
 
+        self.current_user = get_current_user()
         self.pack(fill="both", expand=True)
 
         title = ctk.CTkLabel(
@@ -25,29 +28,52 @@ class UsersPage(ctk.CTkFrame):
         button_frame = ctk.CTkFrame(self)
         button_frame.pack(fill="x", padx=20)
 
-        ctk.CTkButton(
-            button_frame,
-            text="Add User",
-            width=150,
-            command=self.open_add_user
-        ).pack(side="left", pady=10)
+        if self.current_user[2] == "Admin":
 
-        ctk.CTkButton(
-            button_frame,
-            text="✏️ Edit User",
-            command=self.open_edit_user
-        ).pack(side="left", padx=10)
+            ctk.CTkButton(
+                button_frame,
+                text="Add User",
+                width=150,
+                command=self.open_add_user
+            ).pack(
+                side="left",
+                pady=10
+            )
 
-        ctk.CTkButton(
-            button_frame,
-            text="Disable User",
-            fg_color="orange",
-            hover_color="#cc8400",
-            command=self.disable_user
-        ).pack(
-            side="left",
-            padx=10
-        )
+        if self.current_user[2] == "Admin":
+
+            ctk.CTkButton(
+                button_frame,
+                text="✏️ Edit User",
+                command=self.open_edit_user
+            ).pack(
+                side="left",
+                padx=10
+            )
+
+        if self.current_user[2] == "Admin":
+
+            ctk.CTkButton(
+                button_frame,
+                text="Disable User",
+                fg_color="orange",
+                hover_color="#cc8400",
+                command=self.disable_user
+            ).pack(
+                side="left",
+                padx=10
+            )
+
+        if self.current_user[2] == "Admin":
+
+            ctk.CTkButton(
+                button_frame,
+                text="🔑 Reset Password",
+                command=self.open_reset_password    
+            ).pack(
+                side="left",
+                padx=10
+            )
 
         table_frame = ctk.CTkFrame(self)
         table_frame.pack(
@@ -148,3 +174,24 @@ class UsersPage(ctk.CTkFrame):
         )
 
         self.load_users()
+
+    def open_reset_password(self):
+
+        selected = self.tree.selection()
+
+        if not selected:
+
+            messagebox.showwarning(
+                "Warning",
+                "Please select a user."
+            )
+            return
+
+        values = self.tree.item(selected[0])["values"]
+
+        username = values[0]
+
+        ResetPasswordWindow(
+            self,
+            username
+        )   

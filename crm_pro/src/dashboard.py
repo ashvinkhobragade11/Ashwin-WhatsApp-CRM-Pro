@@ -19,7 +19,17 @@ ctk.set_default_color_theme("green")
 class Dashboard(ctk.CTk):
 
     def show_users(self):
+
+        if self.current_user[2] == "Executive":
+
+            messagebox.showerror(
+                "Access Denied",
+                "You do not have permission to access the Users module."
+            )
+            return
+
         self.clear_main()
+
         UsersPage(self.main)
 
     def show_reports(self):
@@ -90,25 +100,31 @@ class Dashboard(ctk.CTk):
         )
         self.btn_campaigns.pack(pady=8)
 
-        self.btn_reports = ctk.CTkButton(
-            self.sidebar,
-            text="Reports",
-            command=self.show_reports
-        )
-        self.btn_reports.pack(pady=8)
+        if self.current_user[2] != "Executive":
 
-        self.btn_users = ctk.CTkButton(
-            self.sidebar,
-            text="Users",
-            command=self.show_users
-        )
-        self.btn_users.pack(pady=8)
+            self.btn_reports = ctk.CTkButton(
+                self.sidebar,
+                text="Reports",
+                command=self.show_reports
+            )
+            self.btn_reports.pack(pady=8)
 
-        self.btn_settings = ctk.CTkButton(
-            self.sidebar,
-            text="Settings"
-        )
-        self.btn_settings.pack(pady=8)
+        if self.current_user[2] != "Executive":
+
+            self.btn_users = ctk.CTkButton(
+                self.sidebar,
+                text="Users",
+                command=self.show_users
+            )
+            self.btn_users.pack(pady=8)
+
+        if self.current_user[2] == "Admin":
+
+            self.btn_settings = ctk.CTkButton(
+                self.sidebar,
+                text="Settings"
+            )
+            self.btn_settings.pack(pady=8)
 
         self.btn_logout = ctk.CTkButton(
             self.sidebar,

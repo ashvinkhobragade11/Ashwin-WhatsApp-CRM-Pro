@@ -257,6 +257,30 @@ def update_user(
     conn.commit()
     conn.close()
 
+def update_password(
+    username,
+    password_hash
+):
+
+    conn = connect()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        UPDATE users
+        SET password_hash=?
+        WHERE username=?
+        """,
+        (
+            password_hash,
+            username
+        )
+    )
+
+    conn.commit()
+    conn.close()
+
+
 def disable_user(username):
 
     conn = connect()
