@@ -11,6 +11,12 @@ from modules.auth.session_manager import (
     get_current_user,
     destroy_session
 )
+from modules.auth.permissions import (
+    is_admin,
+    is_executive,
+    can_view_users
+)
+
 
 ctk.set_appearance_mode("Light")
 ctk.set_default_color_theme("green")
@@ -20,7 +26,7 @@ class Dashboard(ctk.CTk):
 
     def show_users(self):
 
-        if self.current_user[2] == "Executive":
+        if not can_view_users():
 
             messagebox.showerror(
                 "Access Denied",
@@ -100,7 +106,7 @@ class Dashboard(ctk.CTk):
         )
         self.btn_campaigns.pack(pady=8)
 
-        if self.current_user[2] != "Executive":
+        if not is_executive():
 
             self.btn_reports = ctk.CTkButton(
                 self.sidebar,
@@ -109,7 +115,7 @@ class Dashboard(ctk.CTk):
             )
             self.btn_reports.pack(pady=8)
 
-        if self.current_user[2] != "Executive":
+        if not is_executive():
 
             self.btn_users = ctk.CTkButton(
                 self.sidebar,
@@ -118,7 +124,7 @@ class Dashboard(ctk.CTk):
             )
             self.btn_users.pack(pady=8)
 
-        if self.current_user[2] == "Admin":
+        if is_admin():
 
             self.btn_settings = ctk.CTkButton(
                 self.sidebar,

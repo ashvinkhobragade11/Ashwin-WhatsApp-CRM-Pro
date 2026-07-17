@@ -2,6 +2,7 @@ import customtkinter as ctk
 from tkinter import ttk
 from tkinter import messagebox
 
+from modules.auth.permissions import is_admin
 from modules.users.reset_password import ResetPasswordWindow
 from modules.auth.user_manager import deactivate_user
 from database import get_users
@@ -40,7 +41,7 @@ class UsersPage(ctk.CTkFrame):
                 pady=10
             )
 
-        if self.current_user[2] == "Admin":
+        if is_admin():
 
             ctk.CTkButton(
                 button_frame,
@@ -51,7 +52,7 @@ class UsersPage(ctk.CTkFrame):
                 padx=10
             )
 
-        if self.current_user[2] == "Admin":
+        if is_admin():
 
             ctk.CTkButton(
                 button_frame,
@@ -64,7 +65,7 @@ class UsersPage(ctk.CTkFrame):
                 padx=10
             )
 
-        if self.current_user[2] == "Admin":
+        if is_admin():
 
             ctk.CTkButton(
                 button_frame,
